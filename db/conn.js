@@ -2,10 +2,8 @@ const mongoose = require('mongoose')
 const jwt = require("jsonwebtoken");
 const res = require("express/lib/response");
 mongoose.set('strictQuery', false)
-process.env.user = 'rohitkm4021'
-process.env.pass = 'IloveNaaz'
 
-mongoose.connect(`mongodb+srv://rohit:rohit123@chatapp.t4fgyxk.mongodb.net/?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@chatapp.t4fgyxk.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
