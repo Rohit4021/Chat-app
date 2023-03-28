@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js -e js,hbs,html,css"
+    "dev": "node server.js -e js,hbs,html,css"
   },
   "keywords": [],
   "author": "",
