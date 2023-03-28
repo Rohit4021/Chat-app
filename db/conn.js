@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const jwt = require("jsonwebtoken");
 const res = require("express/lib/response");
 mongoose.set('strictQuery', false)
+require('dotenv').config()
 
 mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASS}@chatapp.t4fgyxk.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
