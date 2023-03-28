@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="/style_profile.css">
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="profile">
+        <div class="top-icons">
+            <!--            <div>-->
+            <!--                <i class="fas fa-arrow-left"></i>-->
+            <!--            </div>-->
+            <!--            <div>-->
+            <!--                <i class="fas fa-ellipsis-v"></i>-->
+            <!--            </div>-->
+        </div>
+        <div class="profile_data">
+
+        </div>
+        <div class="head_div">
+            <h3 id="friends_count">Friends</h3>
+            <a href="/friends" class="see_all">See all</a>
+        </div>
+        <div class="friends">
+            <!--            <div class="friend">-->
+            <!--                <img src="/default_profile.png" class="friend-img">-->
+            <!--                <h4>Jatin Negi</h4>-->
+            <!--            </div>-->
+
+            <!--            <div class="friend">-->
+            <!--                <img src="/default_profile.png" class="friend-img">-->
+            <!--                <h4>Kunal Kapoor</h4>-->
+            <!--            </div>-->
+
+            <!--            <div class="friend">-->
+            <!--                <img src="/default_profile.png" class="friend-img">-->
+            <!--                <h4>Aditya</h4>-->
+            <!--            </div>-->
+
+            <!--            <div class="friend">-->
+            <!--                <img src="/default_profile.png" class="friend-img">-->
+            <!--                <h4>Hariom</h4>-->
+            <!--            </div>-->
+
+            <!--            <div class="friend">-->
+            <!--                <img src="/default_profile.png" class="friend-img">-->
+            <!--                <h4>Krishna Yadav</h4>-->
+            <!--            </div>-->
+
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let socket = io.connect()
+
+    socket.on('loadProfile', namePic => {
+        const profile = document.getElementsByClassName('profile_data')
+        const img = document.createElement('img')
+        img.setAttribute('src', namePic.myPic)
+        img.classList.add('user-img')
+        const h2 = document.createElement('h2')
+        h2.innerText = namePic.name
+        const edit = document.createElement('a')
+        edit.setAttribute('href', `/users/edit/${namePic.email}`)
+        edit.classList.add('btn')
+        edit.innerText = 'Edit Profile'
+        const image = document.createElement('img')
+        const input = document.createElement('input')
+        const form = document.createElement('form')
+        const label = document.createElement('label')
+        label.setAttribute('for', 'input_file')
+        form.setAttribute('action', '/edit')
+        form.setAttribute('method', 'post')
+        form.setAttribute('id', 'form')
+        form.setAttribute('enctype', 'multipart/form-data')
+        input.setAttribute('type', 'file')
+        input.setAttribute('name', 'file')
+        input.setAttribute('id', 'input_file')
+        input.setAttribute('onchange', 'changeProfilePic(this)')
+        image.setAttribute('src', "/camera.png")
+        input.style.display = 'none'
+        image.classList.add('camera_img')
+        label.classList.add('camera_button')
+        label.appendChild(image)
+        form.appendChild(input)
+        profile[0].appendChild(form)
+        profile[0].appendChild(img)
+        profile[0].appendChild(label)
+        profile[0].appendChild(h2)
+        profile[0].appendChild(edit)
+    })
+
+
+    setTimeout(() => {
+        const button = document.getElementsByClassName('camera_button')
+        button[0].addEventListener('click', () => {
+
+        })
+    }, 1000)
+
+
+    socket.on('friends', list => {
+        for (let i = 0; i < list.friendsList.length; i++) {
+            if (list.length !== 0) {
+                const friendsCount = document.getElementById('friends_count')
+                friendsCount.innerText = `Friends (${list.friendsList.length})`
+                const parentDiv = document.getElementsByClassName('friends')
+                const div = document.createElement('div')
+                div.classList.add('friend_block')
+                const img = document.createElement('img')
+                img.setAttribute('src', list.friendsPic[i])
+                img.classList.add('friend-img')
+                const h4 = document.createElement('h4')
+                h4.innerText = list.friendsList[i]
+                h4.style.overflow = 'hidden'
+                h4.setAttribute('title', list.friendsList[i])
+                const div1 = document.createElement('div')
+                div1.classList.add('friend')
+                div1.appendChild(img)
+                div1.appendChild(h4)
+                div.appendChild(div1)
+                parentDiv[0].appendChild(div)
+            }
+        }
+    })
+
+
+
+
+    const changeProfilePic = (file) => {
+        const url = URL.createObjectURL(file.files[0])
+        console.log(url)
+        socket.emit('changePic', url)
+
+        setTimeout(() => {
+            window.location.reload()
+        }, 10000)
+    }
+
+
+
+
+</script>
+</body>
+</html>
